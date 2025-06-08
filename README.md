@@ -10,7 +10,7 @@
   
 mlp mindist all_dft.cfg
 
-After calculations you'll get: Global mindist: 1.26571
+After calculations you'll get: Global mindist: 1.26571 (for instance)
 
 Add this info into '06.mtp' file
 
@@ -24,7 +24,43 @@ Add this info into '06.mtp' file
   and then: 
   
   ./train_test_shuffle.sh
+
+In the end you'll get two files: "train.cfg" and "test.cfg"
+
+4th step:
+  Let's train potential, using command:
   
+  mlp train 06.mtp train.cfg — trained-pot-name=$TMP_DIR/pot.mtp —max-iter=100
+
+  //We can use tmux to run potential "offline": tmux new -s <session_name>, <session_name> is the name of the session//
+
+  After we run a command to train potential in several hours we'll get a a file "Trained.mtp_"
+
+5th step: (make strained structures)
+
+  Create a folder named "Elastic_constant" and put into it script "m_s_new_new.py" and "OUTCAR_ref" and "OUTCAR_ref.cfg" files.
+
+  To run a script "m_s_new_new.py", activate it first:
+
+  chmod +x m_s_new_new.py
+
+  and then:
+
+  python3 m_s_new_new.py
+
+  This script will give strained sctructures with 0-3% and 0.5% steps.
+
+6th step: (calculate the energy of the strained structures)
+
+  In the folder "Elastic constant" you'll get a folder "deformed_cfg" with all strained structures. Copy to this folder "Trained.mtp_" potential (which we got in 4th step) and a script "run_efs.sh". To activate the script use command:
+  
+  chmod +x run_efs.sh
+  
+  and then: 
+  
+  ./run_efs.sh
+
+  After this command you'll get recalculated structures where you can find a value of energy of every structure.
 
 
 
